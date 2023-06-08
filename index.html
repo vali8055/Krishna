@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Map with GeoJSON Border</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      #map {
+        height: 800px;
+        width: 100%;
+      }
+
+      .dialog {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      z-index: 1;
+      width: 300px;
+      height: 600px;
+      display: none;
+      font-family: Arial, sans-serif;
+    }
+    .dialog h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .dialog p {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+    .weather-icon {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <div id="dialog" class="dialog"></div>
+    <script>
+      mapboxgl.accessToken =
+        "pk.eyJ1Ijoic3JpeWEtMTU0MyIsImEiOiJjbGhqN2xndjYwZjgwM25xcDk2MmN6d2VlIn0.g7O5PGGfPljgpC9g-oCS5w";
+
+      // Create the Mapbox map
+      var map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [78.5937, 20.9629],
+        zoom: 5,
+      });
+      // Add zoom control
+      map.addControl(new mapboxgl.NavigationControl());
+      // Load GeoJSON data
+      d3.json("cities.geojson").then(function (data) {
+        // Add the border layer to the map
+        map.on("load", function () {
+          map.addSource("border", {
+            type: "geojson",
+            data: data,
+          });
+
+          map.addLayer({
+            id: "border",
+            type: "line",
+            source: "border",
+            paint: {
+              "line-color": "#FF0000",
+              "line-width": 2,
+            },
+          });
+          map.addLayer({
+          id: 'fill',
+          type: 'fill',
+          source: 'border',
+          paint: {
+            'fill-color': '#FF0000',
+            'fill-opacity': 0.3
+          },
+          filter: ['==', '$type', 'Polygon']
+        });
+        });
+      });
+
+      // Add popup on mouseover/mouseenter event for the border
+      var dialog = document.getElementById("dialog");
+
+      // map.on('mousemove', 'border', function (e) {
+      //     var feature = e.features[0];
+      //     var coordinates = e.lngLat;
+      //     var html = '<h3>Border Information</h3>' +
+      //                '<p>Latitude: ' + coordinates.lat.toFixed(4) + '</p>' +
+      //                '<p>Longitude: ' + coordinates.lng.toFixed(4) + '</p>' +
+      //                '<p>Population: ' + feature.properties.population + '</p>' +
+      //                '<p>Weather: ' + feature.properties.weather + '</p>' +
+      //                '<p>Pollution: ' + feature.properties.pollution + '</p>' ;
+      //     dialog.innerHTML = html;
+      //     dialog.style.display = 'block';
+      //   });
+
+      //   // Hide dialog when mouse leaves the border
+      //   map.on('mouseleave', 'border', function () {
+      //     dialog.style.display = 'none';
+      //   });
+
+
+      //   // Show dialog on mousemove event when inside the fill
+      //   map.on('mousemove', 'fill', function (e) {
+      //     var feature = e.features[0];
+      //     var coordinates = e.lngLat;
+      //     var html = '<h3>Border Information</h3>' +
+      //                '<p>Latitude: ' + coordinates.lat.toFixed(4) + '</p>' +
+      //                '<p>Longitude: ' + coordinates.lng.toFixed(4) + '</p>' +
+      //                '<p>Population: ' + feature.properties.population + '</p>' +
+      //                '<p>Weather: ' + feature.properties.weather + '</p>' +
+      //                '<p>Pollution: ' + feature.properties.pollution + '</p>' ;
+      //     dialog.innerHTML = html;
+      //     dialog.style.display = 'block';
+      //   });
+
+      //   // Hide dialog when mouse leaves the fill
+      //   map.on('mouseleave', 'fill', function () {
+      //     dialog.style.display = 'none';
+      //   });
+    
+
+
+
+      // map.on('mousemove', function (e) {
+      //     var features = map.queryRenderedFeatures(e.point, { layers: ['border', 'fill'] });
+      //     if (features.length > 0) {
+      //       var feature = features[0];
+      //       var coordinates = e.lngLat;
+      //       var html = '<h3>Border Information</h3>' +
+      //                  '<p>Latitude: ' + coordinates.lat.toFixed(4) + '</p>' +
+      //                  '<p>Longitude: ' + coordinates.lng.toFixed(4) + '</p>' +
+      //                  '<p>Population: ' + feature.properties.population + '</p>' +
+      //                  '<p>Weather: ' + feature.properties.weather + '</p>' +
+      //                  '<p>Pollution: ' + feature.properties.pollution + '</p>';
+      //       dialog.innerHTML = html;
+      //       dialog.style.display = 'block';
+
+      //       // Create and position the weather icon
+      //       var weatherIcon = document.createElement('img');
+      //       weatherIcon.className = 'weather-icon';
+      //       weatherIcon.src = feature.properties.weatherIcon;
+      //       weatherIcon.alt = 'Weather Icon';
+      //       var container = map.getCanvasContainer();
+      //       container.appendChild(weatherIcon);
+
+      //       // Position the weather icon above the border or fill
+      //       var point = map.project(coordinates);
+      //       weatherIcon.style.left = point.x + 'px';
+      //       weatherIcon.style.top = point.y - 50 + 'px';
+      //     } else {
+      //       dialog.style.display = 'none';
+      //       var weatherIcon = document.querySelector('.weather-icon');
+      //       if (weatherIcon) {
+      //         weatherIcon.parentNode.removeChild(weatherIcon);
+      //       }
+      //     }
+      //   });
+    
+
+
+
+
+
+
+
+      var weatherIcon = null;
+
+        // Show dialog and weather icon on mousemove event when inside the fill
+        map.on('mousemove', 'fill', function (e) {
+          if (!weatherIcon) {
+            weatherIcon = document.createElement('img');
+            weatherIcon.className = 'weather-icon';
+            var container = map.getCanvasContainer();
+            container.appendChild(weatherIcon);
+          }
+
+          var feature = e.features[0];
+          var coordinates = e.lngLat;
+          var html = '<h3>Border Information</h3>' +
+                     '<p>Latitude: ' + coordinates.lat.toFixed(4) + '</p>' +
+                     '<p>Longitude: ' + coordinates.lng.toFixed(4) + '</p>' +
+                     '<p>Population: ' + feature.properties.population + '</p>' +
+                     '<p>Weather: ' + feature.properties.weather + '</p>' +
+                     '<p>Pollution: ' + feature.properties.pollution + '</p>';
+          dialog.innerHTML = html;
+          dialog.style.display = 'block';
+
+          // Set the weather icon source and position
+          weatherIcon.src = feature.properties.weatherIcon;
+          var point = map.project(coordinates);
+          weatherIcon.style.left = point.x + 'px';
+          weatherIcon.style.top = point.y - 50 + 'px';
+        });
+
+        // Hide dialog and remove weather icon when mouse leaves the fill
+        map.on('mouseleave', 'fill', function () {
+          dialog.style.display = 'none';
+          var container = map.getCanvasContainer();
+          container.removeChild(weatherIcon);
+          weatherIcon = null;
+        });
+      
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
+
+    
+  
