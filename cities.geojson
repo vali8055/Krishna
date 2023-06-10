@@ -3,7 +3,7 @@
     "features": [
       {
         "type": "Feature",
-        "properties": {"population":1222,"weather":"hott","pollution":"veryhigh","weatherIcon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSssMsdbkrxD5yUeUpErTeQD3FqHIwYhmSmFA&usqp=CAU"},
+        "properties": {"population":1222,"weather":"hot","pollution":"12","weatherIcon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSssMsdbkrxD5yUeUpErTeQD3FqHIwYhmSmFA&usqp=CAU"},
         "geometry": {
           "coordinates": [
             [
@@ -94,7 +94,7 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {"population":1500,"weather":"Rainy","pollution":"120","weatherIcon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc9UbZtid2SzdzKrLbOW8EHMDLnpMTUTFvQw&usqp=CAU"},
         "geometry": {
           "coordinates": [
             [
@@ -180,7 +180,7 @@
         }
       },{
         "type": "Feature",
-        "properties": {},
+        "properties": {"population":1800,"weather":"Sunny","pollution":"210","weatherIcon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPK__vdiQaI7NlpJ7aAp9kPyFVXoPx7oOxrw&usqp=CAU"},
         "geometry": {
           "coordinates": [
             [
@@ -254,7 +254,7 @@
         }
       }, {
         "type": "Feature",
-        "properties": {},
+        "properties": {"population":480,"weather":"cold","pollution":"50","weatherIcon":"https://cdn.w600.comps.canstockphoto.com/cold-weather-icon-eps-vector_csp16234683.jpg"},
         "geometry": {
           "coordinates": [
             [
@@ -316,7 +316,7 @@
         }
       }, {
         "type": "Feature",
-        "properties": {},
+        "properties": {"population":3300,"weather":"Snow","pollution":"500","weatherIcon":"https://previews.123rf.com/images/miceking/miceking1609/miceking160900289/63204870-snow-snowflake-symbol.jpg"},
         "geometry": {
           "coordinates": [
             [
@@ -370,7 +370,7 @@
         }
       }, {
         "type": "Feature",
-        "properties": {},
+        "properties": {"population":5500,"weather":"Storm","pollution":"600","weatherIcon":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Weather-storm.svg/1200px-Weather-storm.svg.png"},
         "geometry": {
           "coordinates": [
             [
